@@ -1,0 +1,109 @@
+---
+title: "p8130_hw4_jsg2145"
+author: "Jared Garfinkel"
+date: "11/16/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(viridis)
+knitr::opts_chunk$set(
+	echo = FALSE,
+	warning = FALSE,
+	fig.width = 8, 
+  fig.height = 6,
+  out.width = "90%"
+)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+```
+
+##Problem 3
+
+```{r}
+brain <- readxl::read_excel("./Brain.xlsx") %>% 
+  janitor::clean_names()
+```
+
+```{r}
+non_hum <- brain %>% 
+  filter(species != "Homo sapiens")
+```
+
+```{r}
+non_hum %>% 
+  lm(glia_neuron_ratio ~ ln_brain_mass, data = .)
+```
+
+## Problem 3a
+
+```{r}
+non_hum %>% 
+  ggplot(aes(x = ln_brain_mass, y = glia_neuron_ratio)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y~x, se = FALSE)
+```
+
+```{r}
+fit_1 <- non_hum %>% 
+  lm(glia_neuron_ratio ~ ln_brain_mass, data = .)
+```
+
+```{r}
+predict(fit_1, data.frame(ln_brain_mass = 7.22))
+```
+## Problem 3b
+
+The predicted glia-neuron ratio for humans given the non human data is `r round(predict(fit_1, data.frame(ln_brain_mass = 7.22)), digits = 2)`.
+
+## Problem 3c
+
+The interval for the mean glia-neuron ratio at the given brain mass may make more 
+
+sense given the data we have observed. An interval for a single new observation may
+
+make more sense if we are interested in the predictive ability of our model.
+
+## Problem 3d
+
+$\hat{Y_h} = b_0 + b_1*X_h$
+
+$$s^2(\hat{Y_h}) = MSE\left [\frac{1}{n} + \frac{(X_h-\bar{X})^2}{\sum{(X_i - \bar{X})^2}}\right]$$
+
+```{r}
+anova(fit_1)
+```
+
+```{r}
+non_hum %>% 
+  summarize(xbar = mean(ln_brain_mass))
+```
+```{r}
+non_hum %>% 
+  mutate(
+    xbar = mean(ln_brain_mass),
+    xdiff = ln_brain_mass - xbar,
+    ybar = mean(glia_neuron_ratio),
+    ydiff = glia_neuron_ratio - ybar) %>% 
+  summarize(
+    xdifftot = sum(xdiff^2),
+    ydifftot = sum(ydiff^2)
+  )
+```
+
+
+$$s^2(\hat{Y_h}) = 0.729*\left [ \frac{1}{17} + \frac{(7.22 - 4.29)^2}{22.21}\right]$$
+
+= .729 * `r 1/17 + ((7.22-4.29)^2/22.21)`
+
+= `r .729 * (1/17 + (7.22-4.29)^2/22.21)`
+
+s = $\sqrt{s^2}$ = $\sqrt{.325} = `r sqrt(.325)`
+
+95% CI: 
