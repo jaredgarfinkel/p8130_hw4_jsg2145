@@ -77,14 +77,6 @@ $\hat{Y_h} = b_0 + b_1*X_h$
 $$s^2(\hat{Y_h}) = MSE\left [\frac{1}{n} + \frac{(X_h-\bar{X})^2}{\sum{(X_i - \bar{X})^2}}\right]$$
 
 ```{r}
-anova(fit_1)
-```
-
-```{r}
-non_hum %>% 
-  summarize(xbar = mean(ln_brain_mass))
-```
-```{r}
 non_hum %>% 
   mutate(
     xbar = mean(ln_brain_mass),
@@ -93,17 +85,38 @@ non_hum %>%
     ydiff = glia_neuron_ratio - ybar) %>% 
   summarize(
     xdifftot = sum(xdiff^2),
-    ydifftot = sum(ydiff^2)
+    ydifftot = sum(ydiff^2),
+    MSE = ydifftot/15
   )
 ```
 
 
-$$s^2(\hat{Y_h}) = 0.729*\left [ \frac{1}{17} + \frac{(7.22 - 4.29)^2}{22.21}\right]$$
+$$s^2(\hat{Y_h}) = 0.0774*\left [ \frac{1}{17} + \frac{(7.22 - 4.29)^2}{22.21}\right]$$
 
-= .729 * `r 1/17 + ((7.22-4.29)^2/22.21)`
+= .0774 * `r 1/17 + ((7.22-4.29)^2/22.21)`
 
-= `r .729 * (1/17 + (7.22-4.29)^2/22.21)`
+= `r .0774 * (1/17 + (7.22-4.29)^2/22.21)`
 
-s = $\sqrt{s^2}$ = $\sqrt{.325} = `r sqrt(.325)`
+s = $\sqrt{s^2}$ = $\sqrt{.034} = `r sqrt(.034)`
 
-95% CI: 
+95% CI: $$\hat{Y_h} \pm t_{1-\alpha/2,~n-2}*s(\hat{Y_H})$$
+
+= 1.47 $\pm t_{.975,~15}*0.18$
+
+= 1.47 $\pm$ `r qt(.975, 15)` * 0.18
+
+= (`r 1.47 - qt(.975, 15)*0.18`,`r 1.47 + qt(.975, 15)*0.18`)
+
+Since the human glia nueron ratio is within the 95% confidence interval of the predicted response
+
+there is no evidence that the human brain has an excessive glia-neuron ratio compared with
+
+other primates.
+
+## Problem 3e
+
+This is extrapolation since the prediction is outside the observed range. Extrapolation can 
+
+provide accurate results when the prediction is close to the observed data. However, it may 
+
+not be a good idea if the prediction is far from the observed data.

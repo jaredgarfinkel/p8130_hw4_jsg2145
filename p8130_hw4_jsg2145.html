@@ -398,27 +398,27 @@ summary {
 <h2>Problem 3d</h2>
 <p><span class="math inline">\(\hat{Y_h} = b_0 + b_1*X_h\)</span></p>
 <p><span class="math display">\[s^2(\hat{Y_h}) = MSE\left [\frac{1}{n} + \frac{(X_h-\bar{X})^2}{\sum{(X_i - \bar{X})^2}}\right]\]</span></p>
-<pre><code>## Analysis of Variance Table
-## 
-## Response: glia_neuron_ratio
-##               Df  Sum Sq Mean Sq F value    Pr(&gt;F)    
-## ln_brain_mass  1 0.72865 0.72865  25.257 0.0001507 ***
-## Residuals     15 0.43275 0.02885                      
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre><code>## # A tibble: 1 x 1
-##    xbar
-##   &lt;dbl&gt;
-## 1  4.29</code></pre>
-<pre><code>## # A tibble: 1 x 2
-##   xdifftot ydifftot
-##      &lt;dbl&gt;    &lt;dbl&gt;
-## 1     22.2     1.16</code></pre>
-<p><span class="math display">\[s^2(\hat{Y_h}) = 0.729*\left [ \frac{1}{17} + \frac{(7.22 - 4.29)^2}{22.21}\right]\]</span></p>
-<p>= .729 * 0.4453566</p>
-<p>= 0.324665</p>
-<p>s = <span class="math inline">\(\sqrt{s^2}\)</span> = $ = 0.5700877</p>
-<p>95% CI:</p>
+<pre><code>## # A tibble: 1 x 3
+##   xdifftot ydifftot    MSE
+##      &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+## 1     22.2     1.16 0.0774</code></pre>
+<p><span class="math display">\[s^2(\hat{Y_h}) = 0.0774*\left [ \frac{1}{17} + \frac{(7.22 - 4.29)^2}{22.21}\right]\]</span></p>
+<p>= .0774 * 0.4453566</p>
+<p>= 0.0344706</p>
+<p>s = <span class="math inline">\(\sqrt{s^2}\)</span> = $ = 0.1843909</p>
+<p>95% CI: <span class="math display">\[\hat{Y_h} \pm t_{1-\alpha/2,~n-2}*s(\hat{Y_H})\]</span></p>
+<p>= 1.47 <span class="math inline">\(\pm t_{.975,~15}*0.18\)</span></p>
+<p>= 1.47 <span class="math inline">\(\pm\)</span> 2.1314495 * 0.18</p>
+<p>= (1.0863391,1.8536609)</p>
+<p>Since the human glia nueron ratio is within the 95% confidence interval of the predicted response</p>
+<p>there is no evidence that the human brain has an excessive glia-neuron ratio compared with</p>
+<p>other primates.</p>
+</div>
+<div id="problem-3e" class="section level2">
+<h2>Problem 3e</h2>
+<p>This is extrapolation since the prediction is outside the observed range. Extrapolation can</p>
+<p>provide accurate results when the prediction is close to the observed data. However, it may</p>
+<p>not be a good idea if the prediction is far from the observed data.</p>
 </div>
 
 
