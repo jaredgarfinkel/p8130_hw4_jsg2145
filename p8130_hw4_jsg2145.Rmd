@@ -120,3 +120,159 @@ This is extrapolation since the prediction is outside the observed range. Extrap
 provide accurate results when the prediction is close to the observed data. However, it may 
 
 not be a good idea if the prediction is far from the observed data.
+
+# Problem 4
+
+##Problem 4a
+
+```{r}
+cost_df <- read_csv("./HeartDisease.csv") %>% 
+  janitor::clean_names()
+```
+
+This dataset is `r nrow(cost_df)` rows long and `r ncol(cost_df)` columns across. It records 
+
+observations about patients diagnosed with heart disease. The main variables are total cost and 
+
+number of emergency room visits. Other variables of interest are age, gender, complications, and 
+
+duration of treatment. Other variables includes the number of drugs prescribed, and the number of
+
+comorbidities diagnosed.
+
+```{r}
+cost_df %>% 
+  ggplot(aes(x = e_rvisits)) +
+  geom_histogram(binwidth = 2)
+```
+
+```{r}
+cost_df %>% 
+  ggplot(aes(x = totalcost)) +
+  geom_histogram(binwidth = 5000)
+```
+
+```{r}
+cost_df %>% 
+  ggplot(aes(x = duration)) +
+  geom_histogram(binwidth = 30)
+```
+
+## Problem 4b
+
+The values of total cost are not normally distributed. One applies a log transformation.
+
+```{r}
+cost_df %>% 
+  mutate(
+    ln_cost = log(totalcost)
+  ) %>% 
+  ggplot(aes(x = ln_cost)) +
+  geom_histogram()
+```
+
+```{r}
+cost_df %>% 
+  mutate(
+    comp_bin = if_else(complications == 0, 0, 1)
+  )
+```
+
+## Problem 4c
+
+Add variables for the log of total cost and comp_bin. Transform zeros in total cost to avoid 
+
+infinite values by adding 0.5)
+
+```{r}
+nrml_df <- cost_df %>% 
+  mutate(
+    totalcost = ifelse(totalcost == 0, 0.5, totalcost),
+    ln_cost = log(totalcost),
+    comp_bin = if_else(complications == 0, 0, 1)    
+  )
+```
+
+## Problem 4d
+
+```{r}
+nrml_df %>% 
+  ggplot(aes(x = e_rvisits, y = ln_cost)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  scale_y_continuous(breaks = seq(0,12, by = 1))
+```
+
+```{r}
+nrml_df %>% 
+  lm(ln_cost ~ e_rvisits, data = .)
+```
+
+To interpret the slope, one back transforms the findings by raising the natural number, e, to the
+
+power of the slope. There is an `r exp(5.5+.2256)` increase in cost associated with each emergency visit.
+
+So, for a third visit, there would be an expected increase in cost of 3 * `r exp(5.5+.2256)` = `r 3*exp(5.5+.2256)`
+
+compared with zero visits.
+
+```{r}
+fit <- nrml_df %>% 
+  lm(ln_cost ~ e_rvisits, data = .)
+```
+
+```{r}
+summary(fit)
+```
+
+This summary table shows the adjusted r-squared value is less than 0.1, indicating that the number of 
+
+emergency room visits alone is a poor predictor for the total cost for a patient.
+
+## Problem 4e
+
+```{r}
+fit2 <- nrml_df %>% 
+  lm(ln_cost ~ e_rvisits + comp_bin, data = .)
+```
+
+```{r}
+summary(fit2)
+```
+
+After back transforming on a log-scale, this summary table indicates that there is an `r exp(5.5+.2031)` 
+
+increase in the total cost for a patient per emergency room visit and an average increase of `r exp(5.5+1.7166)` 
+
+in the total cost if there is a complication during treatment.
+
+### Problem 4ei
+
+To determine whether complications are an effect modifier of the association of number of emergency
+
+room visits with total cost, one determines if there is a significant difference in the estimated
+
+slope: (.20311 - .22559)/.22559 = `r .20311 - .22559`/.22559 = `r (.20311 - .22559)/.22559`. A 
+
+cutoff of ten percent is used, so this is not an effect modifier.
+
+### Problem 4eii
+
+To determine whether complications are a confounder of the relationship between number of emergency
+
+room visits and total cost, there must be an association between the confounder and the exposure, 
+
+being number of emergency room visits.
+
+```{r}
+fit3 <- nrml_df %>% 
+  lm(e_rvisits ~ comp_bin, data = .)
+```
+
+```{r}
+summary(fit3)
+```
+
+This summary table shows taht there is a 1.76 increase in the number of emergency room visits if
+
+a complication occurs. 
