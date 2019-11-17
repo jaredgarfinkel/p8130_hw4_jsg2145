@@ -210,9 +210,9 @@ nrml_df %>%
 
 To interpret the slope, one back transforms the findings by raising the natural number, e, to the
 
-power of the slope. There is an `r exp(5.5+.2256)` increase in cost associated with each emergency visit.
+power of the slope. There is an `r exp(.2256)` increase in cost associated with each emergency visit.
 
-So, for a third visit, there would be an expected increase in cost of 3 * `r exp(5.5+.2256)` = `r 3*exp(5.5+.2256)`
+So, for a third visit, there would be an expected increase in cost of 3 * `r exp(.2256)` = `r 3*exp(.2256)`
 
 compared with zero visits.
 
@@ -275,4 +275,45 @@ summary(fit3)
 
 This summary table shows taht there is a 1.76 increase in the number of emergency room visits if
 
-a complication occurs. 
+a complication occurs. However, the adjusted r-squared value indicates that a complication is a poor
+
+predictor of the number of emergency room visits. So, complication is probably not a confounder.
+
+### Problem 4eiii
+
+Since a complication was close to the cutoff for being an effect modifier and it raises the
+
+value of the adjusted r-squared by 50 percent in our model, it should be included in the model.
+
+## Problem 4f
+
+```{r}
+fit4 <- nrml_df %>% 
+  lm(ln_cost ~ e_rvisits +comp_bin + age + gender + duration, data = .)
+```
+
+```{r}
+summary(fit4)
+```
+
+The MLR method using the variables for the number of emergency room visits, the presence of a
+
+complication, age, gender, and duration of treatment raises the adjusted r-squared by a factor of 2.
+
+While the number of emergency room visits, the presence of a complication and the duration of treatment
+
+are associated with increased cost, age and being female are associated with a decrease in cost.
+
+Since the model with the number of emergency room visits and complications accounts for nearly half
+
+of the adjusted r-squared with three fewer variables, it may be more informative to include only these
+
+two variables. Gender and age account for a relatively low proportion of the adjusted r-squared
+
+in the log cost. While duration accounts for a significant portion of the adjusted r-squared, the
+
+effect is very low - duration of treatment increases the price predictably, but at a very low rate.
+
+There is a difficulty in accounting for the relationship between the number of emergency room visits
+
+and complications because they are both categorical variables.

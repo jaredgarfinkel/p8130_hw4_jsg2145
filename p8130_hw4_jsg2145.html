@@ -467,12 +467,8 @@ summary {
 </div>
 <div id="problem-4c" class="section level2">
 <h2>Problem 4c</h2>
-<pre class="r"><code>nrml_df &lt;- cost_df %&gt;% 
-  mutate(
-    totalcost = ifelse(totalcost == 0, 0.5, totalcost),
-    ln_cost = log(totalcost),
-    comp_bin = if_else(complications == 0, 0, 1)    
-  )</code></pre>
+<p>Add variables for the log of total cost and comp_bin. Transform zeros in total cost to avoid</p>
+<p>infinite values by adding 0.5)</p>
 </div>
 <div id="problem-4d" class="section level2">
 <h2>Problem 4d</h2>
@@ -485,8 +481,8 @@ summary {
 ## (Intercept)    e_rvisits  
 ##      5.5147       0.2256</code></pre>
 <p>To interpret the slope, one back transforms the findings by raising the natural number, e, to the</p>
-<p>power of the slope. There is an 306.6171804 increase in cost associated with each emergency visit.</p>
-<p>So, for a third visit, there would be an expected increase in cost of 3 * 306.6171804 = 3.759223</p>
+<p>power of the slope. There is an 1.2530743 increase in cost associated with each emergency visit.</p>
+<p>So, for a third visit, there would be an expected increase in cost of 3 * 1.2530743 = 3.759223</p>
 <p>compared with zero visits.</p>
 <pre><code>## 
 ## Call:
@@ -564,8 +560,51 @@ summary {
 ## Multiple R-squared:  0.02311,    Adjusted R-squared:  0.02187 
 ## F-statistic:  18.6 on 1 and 786 DF,  p-value: 1.822e-05</code></pre>
 <p>This summary table shows taht there is a 1.76 increase in the number of emergency room visits if</p>
-<p>a complication occurs.</p>
+<p>a complication occurs. However, the adjusted r-squared value indicates that a complication is a poor</p>
+<p>predictor of the number of emergency room visits. So, complication is probably not a confounder.</p>
 </div>
+<div id="problem-4eiii" class="section level3">
+<h3>Problem 4eiii</h3>
+<p>Since a complication was close to the cutoff for being an effect modifier and it raises the</p>
+<p>value of the adjusted r-squared by 50 percent in our model, it should be included in the model.</p>
+</div>
+</div>
+<div id="problem-4f" class="section level2">
+<h2>Problem 4f</h2>
+<pre><code>## 
+## Call:
+## lm(formula = ln_cost ~ e_rvisits + comp_bin + age + gender + 
+##     duration, data = .)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -6.1297 -1.0336 -0.1036  0.9586  4.3480 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  5.9240310  0.5167617  11.464  &lt; 2e-16 ***
+## e_rvisits    0.1744731  0.0228547   7.634 6.64e-14 ***
+## comp_bin     1.5126547  0.2617067   5.780 1.08e-08 ***
+## age         -0.0207402  0.0087826  -2.362   0.0184 *  
+## gender      -0.2191600  0.1404272  -1.561   0.1190    
+## duration     0.0057983  0.0004949  11.715  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.644 on 782 degrees of freedom
+## Multiple R-squared:  0.268,  Adjusted R-squared:  0.2633 
+## F-statistic: 57.26 on 5 and 782 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The MLR method using the variables for the number of emergency room visits, the presence of a</p>
+<p>complication, age, gender, and duration of treatment raises the adjusted r-squared by a factor of 2.</p>
+<p>While the number of emergency room visits, the presence of a complication and the duration of treatment</p>
+<p>are associated with increased cost, age and being female are associated with a decrease in cost.</p>
+<p>Since the model with the number of emergency room visits and complications accounts for nearly half</p>
+<p>of the adjusted r-squared with three fewer variables, it may be more informative to include only these</p>
+<p>two variables. Gender and age account for a relatively low proportion of the adjusted r-squared</p>
+<p>in the log cost. While duration accounts for a significant portion of the adjusted r-squared, the</p>
+<p>effect is very low - duration of treatment increases the price predictably, but at a very low rate.</p>
+<p>There is a difficulty in accounting for the relationship between the number of emergency room visits</p>
+<p>and complications because they are both categorical variables.</p>
 </div>
 </div>
 
