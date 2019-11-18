@@ -56,6 +56,11 @@ fit_1 <- non_hum %>%
 ```
 
 ```{r}
+summary(fit_1)
+```
+
+
+```{r}
 predict(fit_1, data.frame(ln_brain_mass = 7.22))
 ```
 ## Problem 3b
@@ -64,7 +69,7 @@ The predicted glia-neuron ratio for humans given the non human data is `r round(
 
 ## Problem 3c
 
-The interval for the mean glia-neuron ratio at the given brain mass will is preferable because it 
+The interval for the mean glia-neuron ratio at the given brain mass is preferable because it 
 
 takes into account the data we have observed.
 
@@ -95,7 +100,7 @@ $$s^2(\hat{Y_h}) = 0.0774*\left [ \frac{1}{17} + \frac{(7.22 - 4.29)^2}{22.21}\r
 
 = `r .0774 * (1/17 + (7.22-4.29)^2/22.21)`
 
-s = $\sqrt{s^2}$ = $\sqrt{.034} = `r sqrt(.034)`
+s = $\sqrt{s^2} = \sqrt{.034}$ = `r sqrt(.034)`
 
 95% CI: $$\hat{Y_h} \pm t_{1-\alpha/2,~n-2}*s(\hat{Y_H})$$
 
@@ -110,6 +115,11 @@ Since the human glia nueron ratio is within the 95% confidence interval of the p
 there is no evidence that the human brain has an excessive glia-neuron ratio compared with
 
 other primates.
+
+```{r}
+predict.lm(fit_1, data.frame(ln_brain_mass = 7.22), interval = "prediction")
+```
+
 
 ## Problem 3e
 
@@ -323,11 +333,7 @@ While the number of emergency room visits, the presence of a complication and th
 
 are associated with increased cost, age and being female are associated with a decrease in cost.
 
-Since the model with the number of emergency room visits and complications accounts for nearly half
-
-of the adjusted r-squared with three fewer variables, it may be more informative to include only these
-
-two variables. Gender and age account for a relatively low proportion of the adjusted r-squared
+Gender and age account for a relatively low proportion of the adjusted r-squared
 
 in the log cost. While duration accounts for a significant portion of the adjusted r-squared, the
 
@@ -344,3 +350,9 @@ average increase in cost of about two dollars and a quarter ($e^{\beta_0}\times 
 On the one-hundredth day it is associated with an increase of $e^{5.924} \times e^{0.005798*100}-e^{5.924} \times e^{0.005798*99}$ 
 
 = `r exp(5.924)*exp(.005798*100)-exp(5.924)*exp(.005798*99)` or about four dollars.
+
+Since the model with the number of emergency room visits and complications accounts for nearly half
+
+of the adjusted r-squared with three fewer variables, it may be more informative to include only these
+
+two variables.
