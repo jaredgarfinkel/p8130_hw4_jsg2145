@@ -64,11 +64,9 @@ The predicted glia-neuron ratio for humans given the non human data is `r round(
 
 ## Problem 3c
 
-The interval for the mean glia-neuron ratio at the given brain mass may make more 
+The interval for the mean glia-neuron ratio at the given brain mass will is preferable because it 
 
-sense given the data we have observed. An interval for a single new observation may
-
-make more sense if we are interested in the predictive ability of our model.
+takes into account the data we have observed.
 
 ## Problem 3d
 
@@ -76,7 +74,7 @@ $\hat{Y_h} = b_0 + b_1*X_h$
 
 $$s^2(\hat{Y_h}) = MSE\left [\frac{1}{n} + \frac{(X_h-\bar{X})^2}{\sum{(X_i - \bar{X})^2}}\right]$$
 
-```{r}
+```{r, results = "hide"}
 non_hum %>% 
   mutate(
     xbar = mean(ln_brain_mass),
@@ -180,9 +178,7 @@ cost_df %>%
 
 ## Problem 4c
 
-Add variables for the log of total cost and comp_bin. Transform zeros in total cost to avoid 
-
-infinite values by adding 0.5)
+Add variables for the log of total cost and comp_bin.
 
 ```{r}
 nrml_df <- cost_df %>% 
@@ -200,7 +196,7 @@ nrml_df %>%
   ggplot(aes(x = e_rvisits, y = ln_cost)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
-  scale_y_continuous(breaks = seq(0,12, by = 1))
+  scale_y_continuous(breaks = seq(0, 12, by = 1))
 ```
 
 ```{r}
@@ -208,13 +204,15 @@ nrml_df %>%
   lm(ln_cost ~ e_rvisits, data = .)
 ```
 
-To interpret the slope, one back transforms the findings by raising the natural number, e, to the
+The natural log of the cost increases by one unit for every .2256 rise in the number of visits.
 
-power of the slope. There is an `r exp(.2256)` increase in cost associated with each emergency visit.
+To interpret this, one may back transform the slope by raising the natural number, $e$, to the power
 
-So, for a third visit, there would be an expected increase in cost of 3 * `r exp(.2256)` = `r 3*exp(.2256)`
+of the slope. So, for each emergency room visit, there is a $e^{.2256}$ times rise in cost. In other
 
-compared with zero visits.
+words, there is an $e^{.2256}-1$ percent rise in cost for each emergency room visit. This is equivalent
+
+to `r (exp(.2256)-1)*100` %. 
 
 ```{r}
 fit <- nrml_df %>% 
@@ -240,19 +238,32 @@ fit2 <- nrml_df %>%
 summary(fit2)
 ```
 
-After back transforming on a log-scale, this summary table indicates that there is an `r exp(5.5+.2031)` 
+After back transforming on a log-scale, this summary table indicates that there is 
 
-increase in the total cost for a patient per emergency room visit and an average increase of `r exp(5.5+1.7166)` 
+an `r exp(.2031)` times increase in the total cost for a patient per emergency room, or `r (exp(.2031)-1)*100` visit and 
 
-in the total cost if there is a complication during treatment.
+ a `r exp(1.7166)` times increase in the total cost (`r (exp(1.7166)-1)*100` %) if there 
+ 
+ is a complication during treatment.
 
 ### Problem 4ei
+
+```{r}
+fit5 <- nrml_df %>% 
+  lm(ln_cost ~ e_rvisits * comp_bin, data = .)
+```
+
+```{r}
+summary(fit5)
+```
+
+
 
 To determine whether complications are an effect modifier of the association of number of emergency
 
 room visits with total cost, one determines if there is a significant difference in the estimated
 
-slope: (.20311 - .22559)/.22559 = `r .20311 - .22559`/.22559 = `r (.20311 - .22559)/.22559`. A 
+slope: (.20964 - .22559)/.22559 = `r .20964 - .22559`/.22559 = `r (.20964 - .22559)/.22559`. A 
 
 cutoff of ten percent is used, so this is not an effect modifier.
 
@@ -277,13 +288,21 @@ This summary table shows taht there is a 1.76 increase in the number of emergenc
 
 a complication occurs. However, the adjusted r-squared value indicates that a complication is a poor
 
-predictor of the number of emergency room visits. So, complication is probably not a confounder.
+predictor of the number of emergency room visits. So, complication is probably not a confounder. On
+
+the other hand, the model including complications indicates there is a significant difference in the
+
+estimated slope: (.20311 - .22559)/.22559 = `r .20311 - .22559`/.22559 = `r (.20311 - .22559)/.22559`.
+
+Using a cutoff of 10%, this number is quite close.
 
 ### Problem 4eiii
 
-Since a complication was close to the cutoff for being an effect modifier and it raises the
+Since the presence of a complication was close to the cutoff for being a confounder and it 
 
-value of the adjusted r-squared by 50 percent in our model, it should be included in the model.
+raises the value of the adjusted r-squared by 50 percent in our model, it should be included in 
+
+the model.
 
 ## Problem 4f
 
@@ -312,8 +331,16 @@ two variables. Gender and age account for a relatively low proportion of the adj
 
 in the log cost. While duration accounts for a significant portion of the adjusted r-squared, the
 
-effect is very low - duration of treatment increases the price predictably, but at a very low rate.
+effect is very low - duration of treatment increases the price predictably, but at a very low rate. The
 
-There is a difficulty in accounting for the relationship between the number of emergency room visits
+cost to a patient would increase about 0.6% ($(e^{.0057983}-1)\times100$% = `r (exp(.0057983)-1)*100`%)
 
-and complications because they are both categorical variables.
+per day. On the first day of the stay, a one day increase in length of stay is associated with an 
+
+average increase in cost of about two dollars and a quarter ($e^{\beta_0}\times e^{\beta_1*x}-e^{\beta_0}$)
+
+= $e^{5.924} \times e^{0.005798}-e^{5.924}$ = `r exp(5.924)*exp(.005798)-exp(5.924)`. 
+
+On the one-hundredth day it is associated with an increase of $e^{5.924} \times e^{0.005798*100}-e^{5.924} \times e^{0.005798*99}$ 
+
+= `r exp(5.924)*exp(.005798*100)-exp(5.924)*exp(.005798*99)` or about four dollars.

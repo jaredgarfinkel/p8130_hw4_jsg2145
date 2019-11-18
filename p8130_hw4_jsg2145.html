@@ -390,18 +390,13 @@ summary {
 </div>
 <div id="problem-3c" class="section level2">
 <h2>Problem 3c</h2>
-<p>The interval for the mean glia-neuron ratio at the given brain mass may make more</p>
-<p>sense given the data we have observed. An interval for a single new observation may</p>
-<p>make more sense if we are interested in the predictive ability of our model.</p>
+<p>The interval for the mean glia-neuron ratio at the given brain mass will is preferable because it</p>
+<p>takes into account the data we have observed.</p>
 </div>
 <div id="problem-3d" class="section level2">
 <h2>Problem 3d</h2>
 <p><span class="math inline">\(\hat{Y_h} = b_0 + b_1*X_h\)</span></p>
 <p><span class="math display">\[s^2(\hat{Y_h}) = MSE\left [\frac{1}{n} + \frac{(X_h-\bar{X})^2}{\sum{(X_i - \bar{X})^2}}\right]\]</span></p>
-<pre><code>## # A tibble: 1 x 3
-##   xdifftot ydifftot    MSE
-##      &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;
-## 1     22.2     1.16 0.0774</code></pre>
 <p><span class="math display">\[s^2(\hat{Y_h}) = 0.0774*\left [ \frac{1}{17} + \frac{(7.22 - 4.29)^2}{22.21}\right]\]</span></p>
 <p>= .0774 * 0.4453566</p>
 <p>= 0.0344706</p>
@@ -467,8 +462,7 @@ summary {
 </div>
 <div id="problem-4c" class="section level2">
 <h2>Problem 4c</h2>
-<p>Add variables for the log of total cost and comp_bin. Transform zeros in total cost to avoid</p>
-<p>infinite values by adding 0.5)</p>
+<p>Add variables for the log of total cost and comp_bin.</p>
 </div>
 <div id="problem-4d" class="section level2">
 <h2>Problem 4d</h2>
@@ -480,10 +474,11 @@ summary {
 ## Coefficients:
 ## (Intercept)    e_rvisits  
 ##      5.5147       0.2256</code></pre>
-<p>To interpret the slope, one back transforms the findings by raising the natural number, e, to the</p>
-<p>power of the slope. There is an 1.2530743 increase in cost associated with each emergency visit.</p>
-<p>So, for a third visit, there would be an expected increase in cost of 3 * 1.2530743 = 3.759223</p>
-<p>compared with zero visits.</p>
+<p>The natural log of the cost increases by one unit for every .2256 rise in the number of visits.</p>
+<p>To interpret this, one may back transform the slope by raising the natural number, <span class="math inline">\(e\)</span>, to the power</p>
+<p>of the slope. So, for each emergency room visit, there is a <span class="math inline">\(e^{.2256}\)</span> times rise in cost. In other</p>
+<p>words, there is an <span class="math inline">\(e^{.2256}-1\)</span> percent rise in cost for each emergency room visit. This is equivalent</p>
+<p>to 25.3074335 %.</p>
 <pre><code>## 
 ## Call:
 ## lm(formula = ln_cost ~ e_rvisits, data = .)
@@ -526,14 +521,35 @@ summary {
 ## Residual standard error: 1.782 on 785 degrees of freedom
 ## Multiple R-squared:  0.137,  Adjusted R-squared:  0.1348 
 ## F-statistic: 62.31 on 2 and 785 DF,  p-value: &lt; 2.2e-16</code></pre>
-<p>After back transforming on a log-scale, this summary table indicates that there is an 299.7953275</p>
-<p>increase in the total cost for a patient per emergency room visit and an average increase of 1361.8508873</p>
-<p>in the total cost if there is a complication during treatment.</p>
+<p>After back transforming on a log-scale, this summary table indicates that there is</p>
+<p>an 1.225195 times increase in the total cost for a patient per emergency room, or 22.5194982 visit and</p>
+<p>a 5.5655733 times increase in the total cost (456.557331 %) if there</p>
+<p>is a complication during treatment.</p>
 <div id="problem-4ei" class="section level3">
 <h3>Problem 4ei</h3>
+<pre><code>## 
+## Call:
+## lm(formula = ln_cost ~ e_rvisits * comp_bin, data = .)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -7.218 -1.077  0.013  1.210  4.410 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)         5.47630    0.10635  51.492  &lt; 2e-16 ***
+## e_rvisits           0.20964    0.02522   8.312 4.15e-16 ***
+## comp_bin            2.20238    0.56160   3.922 9.57e-05 ***
+## e_rvisits:comp_bin -0.09765    0.09754  -1.001    0.317    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.782 on 784 degrees of freedom
+## Multiple R-squared:  0.1381, Adjusted R-squared:  0.1348 
+## F-statistic: 41.88 on 3 and 784 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>To determine whether complications are an effect modifier of the association of number of emergency</p>
 <p>room visits with total cost, one determines if there is a significant difference in the estimated</p>
-<p>slope: (.20311 - .22559)/.22559 = -0.02248/.22559 = -0.0996498. A</p>
+<p>slope: (.20964 - .22559)/.22559 = -0.01595/.22559 = -0.0707035. A</p>
 <p>cutoff of ten percent is used, so this is not an effect modifier.</p>
 </div>
 <div id="problem-4eii" class="section level3">
@@ -561,12 +577,16 @@ summary {
 ## F-statistic:  18.6 on 1 and 786 DF,  p-value: 1.822e-05</code></pre>
 <p>This summary table shows taht there is a 1.76 increase in the number of emergency room visits if</p>
 <p>a complication occurs. However, the adjusted r-squared value indicates that a complication is a poor</p>
-<p>predictor of the number of emergency room visits. So, complication is probably not a confounder.</p>
+<p>predictor of the number of emergency room visits. So, complication is probably not a confounder. On</p>
+<p>the other hand, the model including complications indicates there is a significant difference in the</p>
+<p>estimated slope: (.20311 - .22559)/.22559 = -0.02248/.22559 = -0.0996498.</p>
+<p>Using a cutoff of 10%, this number is quite close.</p>
 </div>
 <div id="problem-4eiii" class="section level3">
 <h3>Problem 4eiii</h3>
-<p>Since a complication was close to the cutoff for being an effect modifier and it raises the</p>
-<p>value of the adjusted r-squared by 50 percent in our model, it should be included in the model.</p>
+<p>Since the presence of a complication was close to the cutoff for being a confounder and it</p>
+<p>raises the value of the adjusted r-squared by 50 percent in our model, it should be included in</p>
+<p>the model.</p>
 </div>
 </div>
 <div id="problem-4f" class="section level2">
@@ -602,9 +622,13 @@ summary {
 <p>of the adjusted r-squared with three fewer variables, it may be more informative to include only these</p>
 <p>two variables. Gender and age account for a relatively low proportion of the adjusted r-squared</p>
 <p>in the log cost. While duration accounts for a significant portion of the adjusted r-squared, the</p>
-<p>effect is very low - duration of treatment increases the price predictably, but at a very low rate.</p>
-<p>There is a difficulty in accounting for the relationship between the number of emergency room visits</p>
-<p>and complications because they are both categorical variables.</p>
+<p>effect is very low - duration of treatment increases the price predictably, but at a very low rate. The</p>
+<p>cost to a patient would increase about 0.6% (<span class="math inline">\((e^{.0057983}-1)\times100\)</span>% = 0.5815143%)</p>
+<p>per day. On the first day of the stay, a one day increase in length of stay is associated with an</p>
+<p>average increase in cost of about two dollars and a quarter (<span class="math inline">\(e^{\beta_0}\times e^{\beta_1*x}-e^{\beta_0}\)</span>)</p>
+<p>= <span class="math inline">\(e^{5.924} \times e^{0.005798}-e^{5.924}\)</span> = 2.1741943.</p>
+<p>On the one-hundredth day it is associated with an increase of <span class="math inline">\(e^{5.924} \times e^{0.005798*100}-e^{5.924} \times e^{0.005798*99}\)</span></p>
+<p>= 3.8599729 or about four dollars.</p>
 </div>
 </div>
 
