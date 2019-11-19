@@ -329,6 +329,7 @@ summary(fit4)
 anova(fit2, fit4)
 ```
 
+### Problem 4fi
 
 The MLR method using the variables for the number of emergency room visits, the presence of a
 
@@ -355,6 +356,8 @@ average increase in cost of about two dollars and a quarter ($e^{\beta_0}\times 
 On the one-hundredth day it is associated with an increase of $e^{5.924} \times e^{0.005798*100}-e^{5.924} \times e^{0.005798*99}$ 
 
 = `r exp(5.924)*exp(.005798*100)-exp(5.924)*exp(.005798*99)` or about four dollars.
+
+### Problem 4fii
 
 Even though there is evidence to suggest the complex model accounts for more of the variability in
 
