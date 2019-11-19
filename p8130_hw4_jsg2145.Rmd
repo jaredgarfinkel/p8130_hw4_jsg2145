@@ -318,12 +318,17 @@ the model.
 
 ```{r}
 fit4 <- nrml_df %>% 
-  lm(ln_cost ~ e_rvisits +comp_bin + age + gender + duration, data = .)
+  lm(ln_cost ~ e_rvisits + comp_bin + age + gender + duration, data = .)
 ```
 
 ```{r}
 summary(fit4)
 ```
+
+```{r}
+anova(fit2, fit4)
+```
+
 
 The MLR method using the variables for the number of emergency room visits, the presence of a
 
@@ -350,6 +355,12 @@ average increase in cost of about two dollars and a quarter ($e^{\beta_0}\times 
 On the one-hundredth day it is associated with an increase of $e^{5.924} \times e^{0.005798*100}-e^{5.924} \times e^{0.005798*99}$ 
 
 = `r exp(5.924)*exp(.005798*100)-exp(5.924)*exp(.005798*99)` or about four dollars.
+
+Even though there is evidence to suggest the complex model accounts for more of the variability in
+
+our model according to a partial F-test, there is reason to believe a simple model may be more 
+
+useful in practice.
 
 Since the model with the number of emergency room visits and complications accounts for nearly half
 

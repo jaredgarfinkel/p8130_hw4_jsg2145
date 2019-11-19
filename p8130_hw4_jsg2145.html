@@ -634,6 +634,15 @@ summary {
 ## Residual standard error: 1.644 on 782 degrees of freedom
 ## Multiple R-squared:  0.268,  Adjusted R-squared:  0.2633 
 ## F-statistic: 57.26 on 5 and 782 DF,  p-value: &lt; 2.2e-16</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: ln_cost ~ e_rvisits + comp_bin
+## Model 2: ln_cost ~ e_rvisits + comp_bin + age + gender + duration
+##   Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1    785 2492.1                                  
+## 2    782 2113.9  3    378.24 46.642 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>The MLR method using the variables for the number of emergency room visits, the presence of a</p>
 <p>complication, age, gender, and duration of treatment raises the adjusted r-squared by a factor of 2.</p>
 <p>While the number of emergency room visits, the presence of a complication and the duration of treatment</p>
@@ -647,6 +656,9 @@ summary {
 <p>= <span class="math inline">\(e^{5.924} \times e^{0.005798}-e^{5.924}\)</span> = 2.1741943.</p>
 <p>On the one-hundredth day it is associated with an increase of <span class="math inline">\(e^{5.924} \times e^{0.005798*100}-e^{5.924} \times e^{0.005798*99}\)</span></p>
 <p>= 3.8599729 or about four dollars.</p>
+<p>Even though there is evidence to suggest the complex model accounts for more of the variability in</p>
+<p>our model according to a partial F-test, there is reason to believe a simple model may be more</p>
+<p>useful in practice.</p>
 <p>Since the model with the number of emergency room visits and complications accounts for nearly half</p>
 <p>of the adjusted r-squared with three fewer variables, it may be more informative to include only these</p>
 <p>two variables.</p>
