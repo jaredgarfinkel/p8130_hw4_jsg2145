@@ -24,7 +24,7 @@ scale_fill_discrete = scale_fill_viridis_d
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
-##Problem 3
+## Problem 3
 
 ```{r}
 brain <- readxl::read_excel("./Brain.xlsx") %>% 
